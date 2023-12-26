@@ -1,0 +1,48 @@
+import { MerkleTree } from 'merkletreejs';
+import { ethers } from 'ethers';
+const keccak256 = require('keccak256');
+const allWallets = [
+    "0x8c2d8443A6E567735E3fE3AaAD70C3cd26833D02",
+    "0xA62A6Fbd39103DBA53114b2d5243e96708ca3622",
+    "0xd1b2fB9Ed43F916367a0238a1425d8DBD712C635",
+    "0x2E2000E07d4372c7a61206D956Fd1012138b0242",
+    "0x5c00870E263D1c853Cd47cd32725c98df411f6c3",
+    "0x653Fb90924C40a607c306762Da3834D7646d4e1e",
+    "0xD9da949fcd9Cd93Da338AA1C3b0A5339f6213CF8",
+    "0x5b3141F1b34C8BB35203d4fBb1d496f492cC8bc2",
+    "0x0ec5697254Dc3c28dCA50b090Ac0Bac0b160B7c4",
+    "0xeD47d730075AcCecc7ec20d5F564D4466e06B705",
+    "0xc1d561Dd4af556319d192051Fa7C8e15799d8122",
+    "0x7C993F8F4A9C312b7468b19fB705F9b083351355",
+    "0x70F4E2bb166454cAa806BCB2B7963Fe3457B20EC",
+    "0x4B6c4c8cD9d1fEb55c181eB1f508DBe0EAC00c22",
+    "0x3497D6B986a57c21767A63d70640D8cfB1860f12",
+    "0x3B7720C814c90A03ACBF85A4ccEc2788A40402E5",
+    "0x2bE6902C4b64Ebc9478a5DcdB8C9162Db0db4bE4",
+    "0x1AE04912BF59237f47838738651D9E65cf4105c2",
+    "0xCAc015AeF644Fe067F201e0d096e39A2B8C5a2a1",
+    "0x11bC70E1e4Bc501884F84B4DE7b2c5218c0B9A55",
+    "0x5deFf2d275603F7B20CF231b4125007B204eb66C",
+    "0x850464530A9Cd80E4ed2B56Cc377d710Eb4da064",
+    "0x53140bca79088d4F0B0dF863251Cda2b8629C633",
+    "0xbCE5c026BE5D72E71b2Df4D4d2fe4ED7b142C922",
+    "0x6B89B533085c5b35CDb037D6eE1A593AbD3cEfa9",
+    "0x65De38471dfba802adf3D387d9B7c592D12ec14E",
+    "0x10e23eB29CDeb9f07A65EeB156b109A23938326E",
+    "0x0b399777d9534DfB9cfd9c04b8D5b6B66e205009",
+    "0x64e160d3b0a7c6579c3b659a2ae70b0c369bdc49",
+    "0x6E296bc1B29D7c54448a2aa573007Be3A04550F8",
+    "0xcaa9Ed10f891b742d889b0DDb3ea6A8bd9c9f4ca",
+    "0x23C288693400BDf36e9293d383dED675D0a5D424",
+    "0x7C6b8CbE398459540E6788FA1599b6b5927CF780",
+  ]
+  
+const abi = ethers.AbiCoder.defaultAbiCoder();
+const leaves = allWallets.map(addr => keccak256(abi.encode(["address"], [addr])));
+const merkleTree = new MerkleTree(leaves, ethers.keccak256, { sortPairs: true });
+
+const rootHash = merkleTree.getRoot().toString('hex');
+const myAddress = "0xc1d561Dd4af556319d192051Fa7C8e15799d8122";
+console.log(`allWallets Merkle Root: 0x${rootHash}`);
+const proof = merkleTree.getHexProof(keccak256(abi.encode(["address"], [myAddress])));
+console.log(`Adddress: ${myAddress} \nProof: ${proof}`);
